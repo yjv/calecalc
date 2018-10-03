@@ -1,0 +1,6 @@
+[package]
+name = "calecalc"
+version = "0.1.0"
+authors = ["Yosef Deray <yosefderay770@gmail.com>"]
+
+[dependencies]
