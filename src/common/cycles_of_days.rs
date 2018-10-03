@@ -23,3 +23,11 @@ pub fn kday_before(rd: i32, k: i32) -> i32 {
 pub fn kday_after(rd: i32, k: i32) -> i32 {
     kday_on_or_before(rd + 7, k)
 }
+
+pub fn nth_kday(rd: i32, n: i32, k: i32) -> i32 {
+    7 * n + if n > 0 {
+        kday_before(rd, k)
+    } else {
+        kday_after(rd, k)
+    }
+}

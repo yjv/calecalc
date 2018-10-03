@@ -1,4 +1,5 @@
-use super::common::{divide, alternate_divide};
+use super::common::{divide, alternate_divide, divide_f};
+use super::common::cycles_of_days::{kday_before, kday_after, nth_kday as base_nth_kday};
 
 const EPOCH: i32 = 1;
 
@@ -78,8 +79,15 @@ pub fn days_remaining(date: Gregorian) -> i32 {
 }
 
 /// shifted month R.D. date from gregorian
+/// if you consider all months from march and on as part of the next year
+/// and shift the month number to 1 starting form march then unshift by subtracting
+/// the amount of days in those 9 months you get the same number
+/// without needing to pretend that february is 30 days long
 pub fn alt_fixed_from_gregorian(date: Gregorian) -> i32 {
+    // consider it the next year if the month is march or later (adding 9 makes it a full year later when the
+    // month is 3 or more)
     let y = date.year + divide(date.month + 9, 12).0 - 1;
+    // consider march the 1st month of the year
     let m = alternate_divide(date.month - 2, 12).1;
     EPOCH - 1
         // amount of days in the [march, december] range
@@ -88,15 +96,16 @@ pub fn alt_fixed_from_gregorian(date: Gregorian) -> i32 {
         + divide(y, 4).0
         - divide(y, 100).0
         + divide(y, 400).0
+        // this adds the days for every month over 30 in the given cycle
         + divide(3 * m - 1, 5).0
+        // base size if all months
         + 30 * (m - 1)
         + date.day
 }
 
 /// shifted month gregorian date from R.D. date
 pub fn alt_gregorian_from_fixed(rd: i32) -> Gregorian {
-    let y = gregorian_year_from_fixed(EPOCH - 1 + rd + 306).0;
-    let prior_days = rd - alt_fixed_from_gregorian(Gregorian { year: y - 1, month: 3, day: 1 });
+    let (y, prior_days) = alt_gregorian_year_from_fixed(EPOCH - 1 + rd + 306);
     let month = alternate_divide(divide(5 * prior_days + 155, 153).0 + 2, 12).1;
     let year = y - divide(month + 9, 12).0;
     let day = rd - alt_fixed_from_gregorian(Gregorian { year, month, day: 1}) + 1;
@@ -105,5 +114,54 @@ pub fn alt_gregorian_from_fixed(rd: i32) -> Gregorian {
 
 /// shifted month gregorian year from R.D. date
 pub fn alt_gregorian_year_from_fixed(rd: i32) -> (i32, i32) {
-    let approx = divide(rd - EPOCH + 2, )
+    // get approximate year by adding 2 to the date and dividing by the average amount of days in a year
+    let approx = divide_f((rd - EPOCH + 2) as f32, 365.2425).0 as i32;
+    let start = EPOCH
+        + 365 * approx
+        + divide(approx, 4).0
+        - divide(approx, 100).0
+        + divide(approx, 400).0;
+    (
+        // because the days are calculated off the full year approx, start will be the amount of days
+        // at the end of year approx so if rd is less than start then approx is the year that rd falls in the middle of
+        // if rd is more than start then approx was calculated to be one year behind
+        if rd < start { approx } else { approx + 1 },
+        rd - alt_fixed_from_gregorian(Gregorian { year: approx, month: 1, day: 1})
+    )
+}
+
+pub fn independence_day(year: i32) -> i32 {
+    fixed_from_gregorian(Gregorian { year, month: 7, day: 4 })
+}
+
+pub fn nth_kday(n: i32, k: i32, date: Gregorian) -> i32 {
+    base_nth_kday(fixed_from_gregorian(date), n, k)
+}
+
+pub fn first_kday(k: i32, date: Gregorian) -> i32 {
+    nth_kday(1, k, date)
+}
+
+pub fn last_kday(k: i32, date: Gregorian) -> i32 {
+    nth_kday(-1, k, date)
+}
+
+pub fn labor_day(year: i32) -> i32 {
+    first_kday(2, Gregorian { year, month: 9, day: 1 })
+}
+
+pub fn memorial_day(year: i32) -> i32 {
+    last_kday(2, Gregorian { year, month: 5, day: 31 })
+}
+
+pub fn election_day(year: i32) -> i32 {
+    first_kday(3, Gregorian { year, month: 11, day: 2 })
+}
+
+pub fn daylight_saving_start(year: i32) -> i32 {
+    first_kday(1, Gregorian { year, month: 4, day: 1 })
+}
+
+pub fn daylight_saving_end(year: i32) -> i32 {
+    last_kday(1, Gregorian { year, month: 10, day: 31 })
 }
