@@ -1,5 +1,5 @@
-const EPOCH: f32 = -172142.5;
-const MODIFIED_EPOCH: i32 = 678576;
+pub const EPOCH: f32 = -172142.5;
+pub const MODIFIED_EPOCH: i32 = 678576;
 
 pub fn moment_from_jd(jd: f32) -> f32 {
     jd + EPOCH

@@ -1,7 +1,7 @@
 use super::common::{divide, alternate_divide, divide_f};
 use super::common::cycles_of_days::{kday_before, kday_after, nth_kday as base_nth_kday};
 
-const EPOCH: i32 = 1;
+pub const EPOCH: i32 = 1;
 
 #[derive(Clone, Copy, Debug)]
 pub struct Gregorian {
@@ -147,21 +147,21 @@ pub fn last_kday(k: i32, date: Gregorian) -> i32 {
 }
 
 pub fn labor_day(year: i32) -> i32 {
-    first_kday(2, Gregorian { year, month: 9, day: 1 })
+    first_kday(1, Gregorian { year, month: 9, day: 1 })
 }
 
 pub fn memorial_day(year: i32) -> i32 {
-    last_kday(2, Gregorian { year, month: 5, day: 31 })
+    last_kday(1, Gregorian { year, month: 5, day: 31 })
 }
 
 pub fn election_day(year: i32) -> i32 {
-    first_kday(3, Gregorian { year, month: 11, day: 2 })
+    first_kday(2, Gregorian { year, month: 11, day: 2 })
 }
 
 pub fn daylight_saving_start(year: i32) -> i32 {
-    first_kday(1, Gregorian { year, month: 4, day: 1 })
+    first_kday(0, Gregorian { year, month: 4, day: 1 })
 }
 
 pub fn daylight_saving_end(year: i32) -> i32 {
-    last_kday(1, Gregorian { year, month: 10, day: 31 })
+    last_kday(0, Gregorian { year, month: 10, day: 31 })
 }
