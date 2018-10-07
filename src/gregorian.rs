@@ -106,8 +106,8 @@ pub fn alt_fixed_from_gregorian(date: Gregorian) -> RD {
 
 /// shifted month gregorian date from R.D. date
 pub fn alt_gregorian_from_fixed(rd: RD) -> Gregorian {
-    let (y, prior_days) = alt_gregorian_year_from_fixed(EPOCH - 1 + rd + 306);
-    let month = alternate_divide(divide(5 * prior_days + 155, 153).0 + 2, 12).1;
+    let (y, days) = alt_gregorian_year_from_fixed(EPOCH - 1 + rd + 306);
+    let month = alternate_divide(divide(5 * days - 1 + 155, 153).0 + 2, 12).1;
     let year = y - divide(month + 9, 12).0;
     let day = rd - alt_fixed_from_gregorian(Gregorian { year, month, day: 1}) + 1;
     Gregorian { year, month, day }

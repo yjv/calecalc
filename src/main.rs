@@ -9,7 +9,7 @@ fn main() {
         month: 12,
         day: 31
     });
-    let gregorian = gregorian::gregorian_from_fixed(rd);
+    let gregorian = gregorian::alt_gregorian_from_fixed(rd);
     let i = common::cycles_of_days::day_of_week_from_fixed(rd);
     println!("Hello, world! {}, {}, {:?}", rd, i, gregorian);
     let julian1 = julian::julian_from_fixed(rd);
