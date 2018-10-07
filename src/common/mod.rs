@@ -1,5 +1,7 @@
 pub mod cycles_of_days;
 
+pub type RD = i32;
+
 /// special divide function that always has a
 /// positive modulo value when y is positive in essence
 /// (-x) mod y = y - (x mod y) also az = (xz mod yz) this way
