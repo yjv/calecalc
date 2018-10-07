@@ -3,7 +3,8 @@ mod roman;
 use common::{divide, RD};
 use gregorian::{fixed_from_gregorian, Gregorian};
 
-pub const EPOCH: i32 = -1;
+// gregorian 12/30/0
+pub const EPOCH: RD = -1;
 
 #[derive(Clone, Copy, Debug)]
 pub struct Julian {

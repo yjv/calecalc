@@ -2,6 +2,7 @@ mod common;
 mod julian_day;
 mod gregorian;
 mod julian;
+mod coptic_ethiopic;
 
 fn main() {
     let rd = gregorian::fixed_from_gregorian(gregorian::Gregorian {
