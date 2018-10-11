@@ -1,4 +1,4 @@
-mod roman;
+pub mod roman;
 
 use common::{divide, RD};
 use gregorian::{fixed_from_gregorian, Gregorian};
@@ -6,7 +6,7 @@ use gregorian::{fixed_from_gregorian, Gregorian};
 // gregorian 12/30/0
 pub const EPOCH: RD = -1;
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct Julian {
     pub year: i32,
     pub month: i32,
@@ -42,19 +42,19 @@ pub fn fixed_from_julian(date: Julian) -> RD {
         + date.day
 }
 
-pub fn julian_from_fixed(rd: RD) -> Julian {
-    let approx = divide(4 * (rd - EPOCH) + 1464, 1461).0;
+pub fn julian_from_fixed(date: RD) -> Julian {
+    let approx = divide(4 * (date - EPOCH) + 1464, 1461).0;
     let year = if approx <= 0 { approx - 1 } else { approx };
-    let prior_days = rd - fixed_from_julian(Julian { year, month: 1, day: 1 });
-    let correction = if rd < fixed_from_julian(Julian { year, month: 3, day: 1 }) {
+    let prior_days = date - fixed_from_julian(Julian { year, month: 1, day: 1 });
+    let correction = if date < fixed_from_julian(Julian { year, month: 3, day: 1 }) {
         0
-    } else if rd >= fixed_from_julian(Julian { year, month: 3, day: 1 }) && is_julian_leap_year(year) {
+    } else if date >= fixed_from_julian(Julian { year, month: 3, day: 1 }) && is_julian_leap_year(year) {
         1
     } else {
         2
     };
     let month = divide(12 * (prior_days + correction) + 373, 367).0;
-    let day = rd - fixed_from_julian(Julian { year, month, day: 1 }) + 1;
+    let day = date - fixed_from_julian(Julian { year, month, day: 1 }) + 1;
     Julian { year, month, day }
 }
 

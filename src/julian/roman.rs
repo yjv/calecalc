@@ -1,7 +1,7 @@
 use super::{fixed_from_julian, julian_from_fixed, Julian, is_julian_leap_year};
 use common::{alternate_divide, RD};
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct Roman {
     pub year: i32,
     pub month: i32,
@@ -44,8 +44,8 @@ pub fn fixed_from_roman(date: Roman) -> i32 {
     + (date.leap as i32)
 }
 
-pub fn roman_from_fixed(rd: RD) -> Roman {
-    let Julian { year, month, day } = julian_from_fixed(rd);
+pub fn roman_from_fixed(date: RD) -> Roman {
+    let Julian { year, month, day } = julian_from_fixed(date);
     let next_month = alternate_divide(month + 1, 12).1;
     let adjusted_year = if next_month == 1 { year + 1 } else { year };
     if day == 1 {
@@ -56,7 +56,7 @@ pub fn roman_from_fixed(rd: RD) -> Roman {
         Roman { year, month, event: Event::Ides, count: ides_of_month(month) - day + 1, leap: false }
     } else if month != 2 || !is_julian_leap_year(year) {
         let kalends = fixed_from_roman(Roman { year: adjusted_year, month: next_month, event: Event::Kalends, count: 1, leap: false });
-        Roman { year: adjusted_year, month: next_month, event: Event::Kalends, count: kalends - rd + 1, leap: false }
+        Roman { year: adjusted_year, month: next_month, event: Event::Kalends, count: kalends - date + 1, leap: false }
     } else if day < 25 {
         Roman { year, month: 3, event: Event::Kalends, count: 30 - day, leap: false }
     } else {

@@ -4,7 +4,7 @@ use super::common::cycles_of_days::{kday_before, kday_after, nth_kday as base_nt
 // gregorian 1/1/1
 pub const EPOCH: RD = 1;
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct Gregorian {
     pub year: i32,
     pub month: i32,
@@ -36,8 +36,8 @@ pub fn fixed_from_gregorian(gregorian: Gregorian) -> RD {
 }
 
 /// calculates year and ordinal day in year from R.D. date
-pub fn gregorian_year_from_fixed(rd: RD) -> (i32, i32) {
-    let d0 = rd - EPOCH;
+pub fn gregorian_year_from_fixed(date: RD) -> (i32, i32) {
+    let d0 = date - EPOCH;
     // days in 400 years 4
     let (n400, d1) = divide(d0, 146097);
     // days in 100 years 2
@@ -55,18 +55,18 @@ pub fn gregorian_year_from_fixed(rd: RD) -> (i32, i32) {
 }
 
 /// calculates gregorian date struct from R.D. date
-pub fn gregorian_from_fixed(rd: RD) -> Gregorian {
-    let (year, days) = gregorian_year_from_fixed(rd);
-    let correction = if rd < fixed_from_gregorian(Gregorian { year, month: 3, day: 1 }) {
+pub fn gregorian_from_fixed(date: RD) -> Gregorian {
+    let (year, days) = gregorian_year_from_fixed(date);
+    let correction = if date < fixed_from_gregorian(Gregorian { year, month: 3, day: 1 }) {
         0
-    } else if rd >= fixed_from_gregorian(Gregorian { year, month: 3, day: 1 }) && is_leap_year(year) {
+    } else if date >= fixed_from_gregorian(Gregorian { year, month: 3, day: 1 }) && is_leap_year(year) {
         1
     } else {
         2
     };
     // calculate months based only on days prior in this year
     let month = divide(12 * (days - 1 + correction) + 373, 367).0;
-    let day = rd - fixed_from_gregorian(Gregorian { year, month, day: 1 }) + 1;
+    let day = date - fixed_from_gregorian(Gregorian { year, month, day: 1 }) + 1;
     Gregorian { year, month, day }
 }
 
@@ -106,18 +106,18 @@ pub fn alt_fixed_from_gregorian(date: Gregorian) -> RD {
 }
 
 /// shifted month gregorian date from R.D. date
-pub fn alt_gregorian_from_fixed(rd: RD) -> Gregorian {
-    let (y, days) = alt_gregorian_year_from_fixed(EPOCH - 1 + rd + 306);
+pub fn alt_gregorian_from_fixed(date: RD) -> Gregorian {
+    let (y, days) = alt_gregorian_year_from_fixed(EPOCH - 1 + date + 306);
     let month = alternate_divide(divide(5 * days - 1 + 155, 153).0 + 2, 12).1;
     let year = y - divide(month + 9, 12).0;
-    let day = rd - alt_fixed_from_gregorian(Gregorian { year, month, day: 1}) + 1;
+    let day = date - alt_fixed_from_gregorian(Gregorian { year, month, day: 1}) + 1;
     Gregorian { year, month, day }
 }
 
 /// shifted month gregorian year from R.D. date
-pub fn alt_gregorian_year_from_fixed(rd: RD) -> (i32, i32) {
+pub fn alt_gregorian_year_from_fixed(date: RD) -> (i32, i32) {
     // get approximate year by adding 2 to the date and dividing by the average amount of days in a year
-    let approx = divide_f((rd - EPOCH + 2) as f32, 365.2425).0 as i32;
+    let approx = divide_f((date - EPOCH + 2) as f32, 365.2425).0 as i32;
     let start = EPOCH
         + 365 * approx
         + divide(approx, 4).0
@@ -127,8 +127,8 @@ pub fn alt_gregorian_year_from_fixed(rd: RD) -> (i32, i32) {
         // because the days are calculated off the full year approx, start will be the amount of days
         // at the end of year approx so if rd is less than start then approx is the year that rd falls in the middle of
         // if rd is more than start then approx was calculated to be one year behind
-        if rd < start { approx } else { approx + 1 },
-        rd - alt_fixed_from_gregorian(Gregorian { year: approx, month: 1, day: 1}) + 1
+        if date < start { approx } else { approx + 1 },
+        date - alt_fixed_from_gregorian(Gregorian { year: approx, month: 1, day: 1}) + 1
     )
 }
 
