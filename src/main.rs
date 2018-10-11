@@ -4,6 +4,7 @@ mod gregorian;
 mod julian;
 mod coptic_ethiopic;
 mod iso;
+mod islamic;
 
 fn main() {
     let mut fixed = 710347;
@@ -53,6 +54,11 @@ fn main() {
         let date = iso::iso_from_fixed(fixed);
         assert_eq!(iso::Iso { year: 1945, week: 46, day: 1 }, date);
         assert_eq!(fixed, iso::fixed_from_iso(date));
+    }
+    {
+        let date = islamic::islamic_from_fixed(fixed);
+        assert_eq!(islamic::Islamic { year: 1364, month: 12, day: 6 }, date);
+        assert_eq!(fixed, islamic::fixed_from_islamic(date));
     }
 //    let rd = gregorian::fixed_from_gregorian(gregorian::Gregorian {
 //        year: 1899,
