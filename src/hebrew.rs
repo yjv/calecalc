@@ -116,21 +116,25 @@ pub fn fixed_from_hebrew(date: Hebrew) -> RD {
 }
 
 pub fn hebrew_from_fixed(date: RD) -> Hebrew {
-    let mut year = divide_f(date as f64 - EPOCH as f64, 35975351.0/98496.0).0 as i32;
+    let mut approximate_year = divide_f(date as f64 - EPOCH as f64, 35975351.0/98496.0).0 as i32 + 1;
 
-    while hebrew_new_year(year + 1) <= date {
-        year += 1;
-    }
+    let year = (approximate_year - 1..=approximate_year + 1)
+        .filter(|&year| hebrew_new_year(year) <= date)
+        .last()
+        .expect("Should always have a value")
+    ;
 
-    let mut month = if date < fixed_from_hebrew(Hebrew { year, month: 1, day: 1 }) {
+    let mut start_month = if date < fixed_from_hebrew(Hebrew { year, month: 1, day: 1 }) {
         7
     } else {
         1
     };
 
-    while fixed_from_hebrew(Hebrew { year, month, day: last_day_of_hebrew_month(month, year) }) < date {
-        month += 1;
-    }
+    let month = (start_month..)
+        .filter(|&month| fixed_from_hebrew(Hebrew { year, month, day: last_day_of_hebrew_month(month, year) }) >= date )
+        .next()
+        .expect("Should always have a value")
+    ;
 
     let day = date - fixed_from_hebrew(Hebrew { year, month, day: 1}) + 1;
     Hebrew { year, month, day }
