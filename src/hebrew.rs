@@ -116,6 +116,7 @@ pub fn fixed_from_hebrew(date: Hebrew) -> RD {
 }
 
 pub fn hebrew_from_fixed(date: RD) -> Hebrew {
+    // 35975351.0/98496.0 is the average length of a hebrew year
     let mut approx_year = divide_f(date as f64 - EPOCH as f64, 35975351.0/98496.0).0 as i32 + 1;
 
     // because years have irregular size the min year can be up to 2 off
