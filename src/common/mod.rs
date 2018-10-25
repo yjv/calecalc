@@ -36,3 +36,14 @@ pub fn alternate_divide(x: i32, y: i32) -> (i32, i32) {
 pub fn round(x: f64) -> f64 {
     (x + 0.5).floor()
 }
+
+pub struct Ratio {
+    dividend: i32,
+    divisor: i32
+}
+
+impl Into<f64> for Ratio {
+    fn into(self) -> f64 {
+        self.dividend as f64 / self.divisor as f64
+    }
+}

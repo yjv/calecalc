@@ -277,7 +277,7 @@ pub fn yahrtzeit_in_gregorian(death_date: Hebrew, gregorian_year: i32) -> Vec<RD
     let dec31 = fixed_from_gregorian(Gregorian { year: gregorian_year, month: 12, day: 31 });
     let year = hebrew_from_fixed(jan1).year;
     [
-        yahrtzeit(birth_date, year),
-        yahrtzeit(birth_date, year + 1)
+        yahrtzeit(death_date, year),
+        yahrtzeit(death_date, year + 1)
     ].iter().cloned().filter(|&date| jan1 <= date && date <= dec31).collect()
 }
