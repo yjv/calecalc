@@ -60,6 +60,11 @@ fn main() {
         assert_eq!(islamic::Islamic { year: 1364, month: 12, day: 6 }, date);
         assert_eq!(fixed, islamic::fixed_from_islamic(date));
     }
+    {
+        let date = hebrew::hebrew_from_fixed(fixed);
+        assert_eq!(hebrew::Hebrew { year: 5706, month: 9, day: 7 }, date);
+        assert_eq!(fixed, hebrew::fixed_from_hebrew(date));
+    }
 //    let rd = gregorian::fixed_from_gregorian(gregorian::Gregorian {
 //        year: 1899,
 //        month: 12,

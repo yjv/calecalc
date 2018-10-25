@@ -1,9 +1,9 @@
-use common::RD;
+use common::{RD, Moment};
 
 pub const EPOCH: JulianDay = -1721424.5;
 pub const MODIFIED_EPOCH: RD = 678576;
 
-type JulianDay = f32;
+type JulianDay = f64;
 type ModifiedJulianDay = i32;
 type Moment = f32;
 

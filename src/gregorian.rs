@@ -117,7 +117,7 @@ pub fn alt_gregorian_from_fixed(date: RD) -> Gregorian {
 /// shifted month gregorian year from R.D. date
 pub fn alt_gregorian_year_from_fixed(date: RD) -> (i32, i32) {
     // get approximate year by adding 2 to the date and dividing by the average amount of days in a year
-    let approx = divide_f((date - EPOCH + 2) as f32, 365.2425).0 as i32;
+    let approx = divide_f((date - EPOCH + 2) as f64, 365.2425).0 as i32;
     let start = EPOCH
         + 365 * approx
         + divide(approx, 4).0
