@@ -15,6 +15,7 @@ pub fn is_islamic_leap_year(year: i32) -> bool {
     divide(14 + 11 * year, 30).1 < 11
 }
 
+/// birashk has the 15th year instead of the 16th year of a 30 year cycle be leap
 pub fn is_islamic_birashk_leap_year(year: i32) -> bool {
     divide(15 + 11 * year, 30).1 < 11
 }

@@ -1,5 +1,5 @@
 use super::common::{divide, alternate_divide, divide_f, RD};
-use super::common::cycles_of_days::{kday_before, kday_after, nth_kday as base_nth_kday};
+use super::common::cycles_of_days::{nth_kday as base_nth_kday};
 
 // gregorian 1/1/1
 pub const EPOCH: RD = 1;

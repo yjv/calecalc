@@ -1,4 +1,3 @@
-use common::divide;
 use common::RD;
 use super::*;
 

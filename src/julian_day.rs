@@ -5,7 +5,6 @@ pub const MODIFIED_EPOCH: RD = 678576;
 
 type JulianDay = f64;
 type ModifiedJulianDay = i32;
-type Moment = f32;
 
 pub fn moment_from_jd(day: JulianDay) -> Moment {
     day + EPOCH
