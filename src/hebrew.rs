@@ -116,9 +116,10 @@ pub fn fixed_from_hebrew(date: Hebrew) -> RD {
 }
 
 pub fn hebrew_from_fixed(date: RD) -> Hebrew {
-    let mut approximate_year = divide_f(date as f64 - EPOCH as f64, 35975351.0/98496.0).0 as i32 + 1;
+    let mut approx_year = divide_f(date as f64 - EPOCH as f64, 35975351.0/98496.0).0 as i32 + 1;
 
-    let year = (approximate_year - 1..=approximate_year + 1)
+    // because years have irregular size the min year can be up to 2 off
+    let year = (approx_year - 1..=approx_year + 2)
         .filter(|&year| hebrew_new_year(year) <= date)
         .last()
         .expect("Should always have a value")
