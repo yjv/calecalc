@@ -5,6 +5,7 @@ mod julian;
 mod coptic_ethiopic;
 mod iso;
 mod islamic;
+mod hebrew;
 
 fn main() {
     let mut fixed = 710347;
