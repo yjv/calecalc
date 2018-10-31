@@ -6,6 +6,7 @@ mod coptic_ethiopic;
 mod iso;
 mod islamic;
 mod hebrew;
+mod hindu;
 
 fn main() {
     let mut fixed = 710347;
@@ -65,6 +66,16 @@ fn main() {
         let date = hebrew::hebrew_from_fixed(fixed);
         assert_eq!(hebrew::Hebrew { year: 5706, month: 9, day: 7 }, date);
         assert_eq!(fixed, hebrew::fixed_from_hebrew(date));
+    }
+    {
+        let date = hindu::solar::hindu_solar_from_fixed(fixed);
+        assert_eq!(hindu::solar::HinduSolar { year: 5046, month: 7, day: 29 }, date);
+        assert_eq!(fixed, hindu::solar::fixed_from_hindu_solar(date));
+    }
+    {
+        let date = hindu::lunisolar::hindu_lunisolar_from_fixed(fixed);
+        assert_eq!(hindu::lunisolar::HinduLunisolar { year: 5046, month: 8, leap_month: false, day: 8 }, date);
+        assert_eq!(fixed, hindu::lunisolar::fixed_from_hindu_lunisolar(date));
     }
 //    let rd = gregorian::fixed_from_gregorian(gregorian::Gregorian {
 //        year: 1899,
