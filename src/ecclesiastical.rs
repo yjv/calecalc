@@ -1,4 +1,4 @@
-use common::{divide, divide_f, RD, cycles_of_days::{kday_after}};
+use common::{divide, RD, cycles_of_days::{kday_after}};
 use gregorian::{fixed_from_gregorian, Gregorian};
 use julian::{fixed_from_julian, Julian};
 

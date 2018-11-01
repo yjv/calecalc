@@ -15,9 +15,10 @@ pub fn divide_f(x: f64, y: f64) -> (f64, f64) {
 pub fn alternate_divide_f(x: f64, y: f64) -> (f64, f64) {
     let result = divide_f(x, y);
 
-    (result.0, match result.1 {
-        0.0 => y,
-        result => result
+    (result.0, if result.1 == 0.0 {
+        y
+    } else {
+        result.1
     })
 }
 

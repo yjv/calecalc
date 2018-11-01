@@ -118,7 +118,7 @@ pub fn fixed_from_hebrew(date: Hebrew) -> RD {
 
 pub fn hebrew_from_fixed(date: RD) -> Hebrew {
     // 35975351.0/98496.0 is the average length of a hebrew year
-    let mut approx_year = divide_f(date as f64 - EPOCH as f64, 35975351.0/98496.0).0 as i32 + 1;
+    let approx_year = divide_f(date as f64 - EPOCH as f64, 35975351.0/98496.0).0 as i32 + 1;
 
     // because years have irregular size the min year can be up to 2 off
     let year = (approx_year - 1..=approx_year + 1)
@@ -127,7 +127,7 @@ pub fn hebrew_from_fixed(date: RD) -> Hebrew {
         .expect("Should always have a value")
     ;
 
-    let mut start_month = if date < fixed_from_hebrew(Hebrew { year, month: 1, day: 1 }) {
+    let start_month = if date < fixed_from_hebrew(Hebrew { year, month: 1, day: 1 }) {
         7
     } else {
         1
