@@ -8,6 +8,7 @@ mod islamic;
 mod hebrew;
 mod ecclesiastical;
 mod hindu;
+mod mayan;
 
 fn main() {
     let mut fixed = 710347;
@@ -77,6 +78,28 @@ fn main() {
         let date = hindu::lunisolar::hindu_lunisolar_from_fixed(fixed);
         assert_eq!(hindu::lunisolar::HinduLunisolar { year: 5046, month: 8, leap_month: false, day: 8 }, date);
         assert_eq!(fixed, hindu::lunisolar::fixed_from_hindu_lunisolar(date));
+    }
+    {
+        let date = mayan::long_count::long_count_from_fixed(fixed);
+        assert_eq!(mayan::long_count::LongCount { baktun: 12, katun: 16, tun: 11, uinal: 16, kin: 9 }, date);
+        assert_eq!(fixed, mayan::long_count::fixed_from_long_count(date));
+    }
+    {
+        let date = mayan::haab::mayan_haab_from_fixed(fixed);
+        assert_eq!(mayan::haab::Haab { month: 11, day: 7 }, date);
+        assert_eq!(fixed, mayan::haab::mayan_haab_on_or_before(date, fixed));
+    }
+    {
+        let date = mayan::tzolkin::mayan_tzolkin_from_fixed(fixed);
+        assert_eq!(mayan::tzolkin::Tzolkin { number: 11, name: 9 }, date);
+        assert_eq!(fixed, mayan::tzolkin::mayan_tzolkin_on_or_before(date, fixed));
+    }
+    {
+        assert_eq!(Some(fixed), mayan::mayan_calendar_round_on_or_before(
+            mayan::haab::Haab { month: 11, day: 7 },
+            mayan::tzolkin::Tzolkin { number: 11, name: 9 },
+            fixed
+        ));
     }
 //    let rd = gregorian::fixed_from_gregorian(gregorian::Gregorian {
 //        year: 1899,
