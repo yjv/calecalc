@@ -6,6 +6,7 @@ mod coptic_ethiopic;
 mod iso;
 mod islamic;
 mod hebrew;
+mod ecclesiastical;
 mod hindu;
 
 fn main() {
