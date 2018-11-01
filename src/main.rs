@@ -9,6 +9,7 @@ mod hebrew;
 mod ecclesiastical;
 mod hindu;
 mod mayan;
+mod balinese_powukon;
 
 fn main() {
     let mut fixed = 710347;
@@ -100,6 +101,11 @@ fn main() {
             mayan::tzolkin::Tzolkin { number: 11, name: 9 },
             fixed
         ));
+    }
+    {
+        let date = balinese_powukon::bali_powukon_from_fixed(fixed);
+        assert_eq!(balinese_powukon::BaliPowukon { luang: true, dwiwara: 2, triwara: 1, caturwara: 1, pancawara: 3, sadwara: 1, saptawara: 2, asatawara: 5, sangawara: 7, dasawara: 2 }, date);
+        assert_eq!(fixed, balinese_powukon::bali_on_or_before(date, fixed));
     }
 //    let rd = gregorian::fixed_from_gregorian(gregorian::Gregorian {
 //        year: 1899,
