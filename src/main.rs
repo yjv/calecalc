@@ -1,15 +1,7 @@
+mod arithmetical;
 mod common;
-mod julian_day;
-mod gregorian;
-mod julian;
-mod coptic_ethiopic;
-mod iso;
-mod islamic;
-mod hebrew;
-mod ecclesiastical;
-mod hindu;
-mod mayan;
-mod balinese_powukon;
+
+use arithmetical::*;
 
 fn main() {
     let mut fixed = 710347;
